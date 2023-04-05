@@ -1,0 +1,400 @@
+{% extends 'StudentUnion/union_base.html' %}
+
+{% block navbar %}
+<section id="topbar" class="d-flex align-items-center">
+    <div class="container d-flex justify-content-center justify-content-md-between">
+        <div class="contact-info d-flex align-items-center">
+            <i class="bi bi-envelope-fill"></i>{{ request.user.email }}
+        </div>
+        <div class="d-none contact-info d-md-block">
+            <i class="bi p-2 bi-person-fill person-icon"></i> {{ request.user.username }}
+        </div>
+    </div>
+</section>
+{% endblock navbar %}
+
+{% block header %}
+<header id="header" class="d-flex align-items-center">
+    <div class="container d-flex align-items-center">
+
+        <h1 class="logo me-auto"><a href="#">HTTTC</a></h1>
+
+        <nav id="navbar" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+                <li class="dropdown"><a href="#"><span>Academic Year</span> <i class="bi bi-chevron-down"></i></a>
+                    <ul>
+                        {% if all_sessions %}
+
+                        {% for year in all_sessions %}
+                        <li class="dropdown"><a href="{% url 'StudentUnion:year-based' year.id %}">
+                                <span>
+                                    {{ year.session_start_year }} - {{ year.session_end_year}}
+                                </span>
+                                <i class="bi bi-chevron-right"></i></a>
+                            <ul>
+                                <li><a href="#">president</a></li>
+                                <li><a href="#">{{ year.session_president }}</a></li>
+                                <li>
+                                    <center>
+                                        <button class="btn getstarted scrollto" type="button" data-bs-toggle="offcanvas"
+                                            data-bs-target="#demo">
+                                            view more
+                                        </button>
+                                    </center>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <div class="offcanvas offcanvas-start" style="width:30%" id="demo">
+                            <div class="offcanvas-header">
+                                <h1 class="offcanvas-title text-uppercase text-center">President Info</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                            </div>
+                            <div class="offcanvas-body">
+                                <div class="  d-flex justify-content-between bg-white mb-3">
+                                    <div class="p-2">
+                                        <li class="list-group-item">
+                                            Level
+                                        </li>
+                                    </div>
+                                    <div class="p-2 text-secondary">
+                                        <li class="list-group-item">
+                                            {{ year.session_president.my_level }}
+                                        </li>
+                                    </div>
+                                </div>
+
+                                <div class="  d-flex justify-content-between bg-white mb-3">
+                                    <div class="p-2">
+                                        <li class="list-group-item">
+                                            Department
+                                        </li>
+                                    </div>
+                                    <div class="p-2 text-secondary">
+                                        <li class="list-group-item">
+                                            {{ year.session_president.my_department }}
+                                        </li>
+                                    </div>
+                                </div>
+
+                                <div class="  d-flex justify-content-between bg-white mb-3">
+                                    <div class="p-2">
+                                        <li class="list-group-item">
+                                            Matricule
+                                        </li>
+                                    </div>
+                                    <div class="p-2 text-secondary">
+                                        <li class="list-group-item">
+                                            {{ year.session_president.matricule_number }}
+                                        </li>
+                                    </div>
+                                </div>
+
+                                <div class="  d-flex justify-content-between bg-white mb-3">
+                                    <div class="p-2">
+                                        <li class="list-group-item">
+                                            username
+                                        </li>
+                                    </div>
+                                    <div class="p-2 text-secondary">
+                                        <li class="list-group-item">
+                                            {{ year.session_president.user.username}}
+                                        </li>
+                                    </div>
+                                </div>
+
+                                <div class="  d-flex justify-content-between bg-white mb-3">
+                                    <div class="p-2">
+                                        <li class="list-group-item">
+                                            Years Active
+                                        </li>
+                                    </div>
+                                    <div class="p-2 text-secondary">
+                                        {% for obj in year.session_president.years_active.all %}
+
+                                        <li class="list-group-item">
+                                            {{ obj.session_start_year }}-{{ obj.session_end_year }}
+                                        </li>
+                                        {% endfor%}
+                                    </div>
+                                </div>
+
+
+                                <div>
+                                    <img class="img-responsive" style="border:0; width: 100%; height: 490px;"
+                                        src="{{ profile.picture.url }}" alt="profile picture">
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        {% else %}
+                        <li class="p-2">
+                            Not past receipts available
+                            <a href="{% url 'StudentUnion:create-receipt' %}">Create</a>
+                        </li>
+                        {% endif %}
+                    </ul>
+                </li>
+                <li><a class="getstarted scrollto" href="{% url 'accounts:logout'%}">Logout</a></li>
+                <a href="#">
+                    <img src="{{ profile.picture.url }}" alt="Avatar" style="border-radius:50%; width: 75px;
+                    height: 75px;  vertical-align: middle; margin-left:10px;" data-bs-toggle="offcanvas"
+                        data-bs-target="#myprofile">
+                </a>
+
+                <div class="offcanvas offcanvas-start" id="myprofile">
+                    <div class="offcanvas-header">
+                        <h1 class="offcanvas-title text-uppercase text-center">Student Info</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+                    </div>
+                    <div class="offcanvas-body">
+                        <div class="  d-flex justify-content-between bg-white mb-3">
+                            <div class="p-2">
+                                <li class="list-group-item">
+                                    Level
+                                </li>
+                            </div>
+                            <div class="p-2 text-secondary">
+                                <li class="list-group-item">
+                                    {{ profile.my_level }}
+                                </li>
+                            </div>
+                        </div>
+
+                        <div class="  d-flex justify-content-between bg-white mb-3">
+                            <div class="p-2">
+                                <li class="list-group-item">
+                                    Department
+                                </li>
+                            </div>
+                            <div class="p-2 text-secondary">
+                                <li class="list-group-item">
+                                    {{ profile.my_department }}
+                                </li>
+                            </div>
+                        </div>
+
+                        <div class="  d-flex justify-content-between bg-white mb-3">
+                            <div class="p-2">
+                                <li class="list-group-item">
+                                    Matricule
+                                </li>
+                            </div>
+                            <div class="p-2 text-secondary">
+                                <li class="list-group-item">
+                                    {{ profile.matricule_number }}
+                                </li>
+                            </div>
+                        </div>
+
+                        <div class="  d-flex justify-content-between bg-white mb-3">
+                            <div class="p-2">
+                                <li class="list-group-item">
+                                    username
+                                </li>
+                            </div>
+                            <div class="p-2 text-secondary">
+                                <li class="list-group-item">
+                                    {{ profile.user.username}}
+                                </li>
+                            </div>
+                        </div>
+
+                        <div class="  d-flex justify-content-between bg-white mb-3">
+                            <div class="p-2">
+                                <li class="list-group-item">
+                                    Years Active
+                                </li>
+                            </div>
+                            <div class="p-2 text-secondary">
+
+                                {% for obj in request.user.student_user.years_active.all %}
+
+                                <li class="list-group-item">
+                                    {{ obj.session_start_year }}-{{ obj.session_end_year }}
+                                </li>
+                                {% endfor%}
+                            </div>
+                        </div>
+
+
+                        <div>
+                            <img class="img-responsive" style="border:0; width: 100%; height: 490px;"
+                                src="{{ profile.picture.url }}" alt="profile picture">
+                        </div>
+                    </div>
+                </div>
+
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+
+    </div>
+</header>
+{% endblock header %}
+
+{% block content %}
+
+{% if duereceipts %}
+{% for receipt in duereceipts %}
+
+<section id="contact" class="contact">
+    <div class="container">
+
+        <div class="section-title">
+            <h2><a href="">{{session.session_start_year}} - {{session.session_end_year}} academic session.</a></h2>
+            <p>session president
+                <strong>
+                    {{session.session_president.user.username}}
+                </strong>
+            </p>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-5 d-flex align-items-stretch">
+                <div class="info">
+                    <h6 class="text-center"><a href="">HTTTC Kumba Students Union</a></h6>
+                    <br />
+
+                    <div class="address">
+                        <i class="bi bi-geo-alt"></i>
+                        <h4>Matricule</h4>
+                        <p>{{ receipt.receipt_owner.matricule_number }}</p>
+                    </div>
+                    <img class="rounded-circle" style="border:0; width: 100%; height: 490px;"
+                        src="/static/school_logo.jpg" alt="school logo">
+                </div>
+
+            </div>
+
+            <div class="col-lg-7 mt-5 mt-lg-0 d-flex align-items-stretch">
+                <div class="row info">
+                    <div class="form-group col-md-6">
+                        <label for="name" class="p-1">
+                            <a href="#">
+                                Account Name
+                            </a>
+                        </label>
+                        <input type="text" value={{ receipt.account_name }} readonly
+                            class="form-control text-uppercase">
+                    </div>
+                    <div class="form-group col-md-6 mt-3 mt-md-0">
+                        <label for="name" class="p-1">
+                            <a href="#">
+                                Account Address
+                            </a>
+                        </label>
+                        <input type="text" value={{ receipt.account_address }} readonly
+                            class=" text-uppercase form-control">
+                    </div>
+
+                    <div class="form-group col-md-6">
+                        <label for="name" class="p-1">
+                            <a href="#">
+                                Our Reference
+                            </a>
+                        </label>
+                        <input type="text" value={{ receipt.our_reference }} readonly
+                            class=" text-uppercase form-control">
+                    </div>
+                    <div class="form-group col-md-6 mt-3 mt-md-0">
+                        <label for="name" class="p-1">
+                            <a href="#">
+                                Transaction Amount
+                            </a>
+                        </label>
+                        <input type="number" value={{ receipt.transaction_amount }} readonly class="form-control">
+                    </div>
+
+                    <div class="form-group col-md-6 mt-3 mt-md-0">
+                        <label for="name" class="p-1">
+                            <a href="#">
+                                Transaction Account
+                            </a>
+                        </label>
+                        <input type="text" value={{ receipt.transaction_account }} readonly class="form-control">
+                    </div>
+
+                    <div class="form-group col-md-6 mt-md-0">
+                        <label for="name" class="p-1">
+                            <a href="#">
+                                Account Address
+                            </a>
+                        </label>
+                        <input type="text" value={{ receipt.account_address }} readonly
+                            class="text-uppercase form-control">
+                    </div>
+
+                    <div class="form-group col-md-6 mt-md-0">
+                        <label for="name" class="p-1">
+                            <a href="#">
+                                Transaction Amount
+                            </a>
+                        </label>
+                        <input type="text" value={{ receipt.transaction_amount }} readonly class="form-control">
+                    </div>
+
+                    <div class="form-group col-md-6 mt-md-0">
+                        <br />
+                        <button type="button" class="p-2 text-center form-control">
+                            <a href="{% url 'StudentUnion:download-receipt' receipt.id %}" class="text-warning ">
+                                Download Receipt
+                            </a>
+                        </button>
+                    </div>
+
+                    <div class="text-center">
+                        <a href="{% url 'StudentUnion:receipt-detail' receipt.id %}">Details</a> |
+                        <a href="{% url 'StudentUnion:receipt-delete' receipt.id %}">Delete</a> |
+
+                        {% comment %}
+                        <a href="{% url 'StudentUnion:receipt-update' receipt.id %}">Update</a> |
+                        {% endcomment %}
+
+                    </div>
+
+                    <div class='text-center'>
+                        <h6> created by
+                            <a href="#" class="text-uppercase">
+                                {{ receipt.receipt_owner }}
+                            </a>
+                        </h6>
+                        <h6> created at level
+                            <a href="#" class="text-uppercase">
+                                {{ receipt.level }}
+                            </a>
+                        </h6>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+{% endfor %}
+
+{% else %}
+<div style="margin-top:200px;">
+    <p class="text-center">
+        You have not created any due receipts for the academic session
+        <strong>
+            {{ session.session_start_year }}-{{ session.session_end_year }}
+        </strong>
+        <br />
+        <a class="text-center" href="{% url 'StudentUnion:create-receipt' %}">create</a>
+    </p>
+</div>
+{% endif %}
+
+{% endblock content %}
+
+{% block plug %}
+
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.6.3/dist/jquery.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script> -->
+{% endblock plug %}

@@ -1,0 +1,112 @@
+{% extends 'StudentUnion/union_base.html' %}
+{% load crispy_forms_tags %}
+
+
+{% block navbar %}
+<section id="topbar" class="d-flex align-items-center">
+    <div class="container d-flex justify-content-center justify-content-md-between">
+        <div class="contact-info d-flex align-items-center">
+            <i class="bi bi-envelope-fill"></i>{{ request.user.email }}
+        </div>
+        <div class="d-none contact-info d-md-block">
+            <i class="bi p-2 bi-person-fill person-icon"></i> {{ request.user.username }}
+        </div>
+    </div>
+</section>
+{% endblock navbar %}
+
+{% block content %}
+<section id="contact" class="contact">
+    <div class="container">
+
+        <div class="section-title">
+            <h2><a href="{% url 'StudentUnion:home' %}">Go back</a></h2>
+            <p>
+                <strong>
+                    Create a new receipt for the current academic session
+                </strong>
+            </p>
+        </div>
+        <div class="col-lg-12 mt-5 mt-lg-0 d-flex align-items-stretch">
+            <form method="POST" class="info" enctype="multipart/form-data">
+                {% csrf_token %}
+                <div class="row" style="padding: 50px;">
+                    <div class="form-group col-md-6" style="padding-bottom:10px">
+                        {{ form.account_name|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-md-6 mt-3 mt-md-0">
+                        {{ form.account_address|as_crispy_field }}
+                    </div>
+
+                    <div class="form-group col-md-6" style="padding-bottom:10px">
+                        {{ form.our_reference|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-md-6 mt-3 mt-md-0">
+                        {{ form.transaction_amount|as_crispy_field }}
+                    </div>
+
+                    <div class="form-group col-md-6 mt-3 mt-md-0">
+                        {{ form.transaction_account|as_crispy_field }}
+                    </div>
+
+                    <div class="form-group col-md-6 mt-md-0" style="padding-bottom:10px">
+                        {{ form.account_address|as_crispy_field }}
+                    </div>
+
+                    <div class="form-group col-md-6 mt-md-0">
+                        {{ form.level|as_crispy_field }}
+                    </div>
+                    <div class="form-group col-md-6 mt-md-0" style="padding-bottom:10px">
+                        {{ form.department|as_crispy_field }}
+                    </div>
+
+                    <div class="form-group col-md-6 mt-md-0">
+                        {{ form.file_name|as_crispy_field }}
+                    </div>
+
+                    <div class="form-group col-md-6 mt-md-0">
+                        <br />
+                        <!-- <input type="submit" value="Submit"> -->
+                        <button type="submit" class="p-2 text-warning text-center form-control">
+                            Save Receipt
+                        </button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</section>
+{% endblock content %}
+
+{% comment %}
+{% block content %}
+<div class="col-md-8">
+    <div class="card">
+        <div class="card-header bg-secondary">
+            <h4 class="card-title text-white text-uppercase">
+                Create New Receipts
+            </h4>
+        </div>
+        <div class="card-body">
+
+            <h6 class="card-category">
+                {% if msg %}
+                <span class="text-danger">{{ msg | safe }}</span>
+                {% else %}
+                Fill in the Receipt's Information
+                {% endif %}
+            </h6>
+            <br />
+            <form method='POST' enctype="multipart/form-data">
+                {% csrf_token %}
+                {{ form.as_p}}
+                <input type="submit" value="Submit">
+            </form>
+
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+{% endcomment %}

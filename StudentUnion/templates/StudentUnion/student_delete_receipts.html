@@ -1,0 +1,9 @@
+{% extends 'layouts/main.html' %}
+
+{% block content %}
+<form method='POST'>
+    {% csrf_token %}
+    <p>Are you sure you want to delete?</p>
+    <input type="submit" Value="Delete">
+</form>
+{% endblock content%}
