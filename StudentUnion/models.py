@@ -68,7 +68,7 @@ class Student(models.Model):
     address = models.TextField(null=True)
     years_active = models.ManyToManyField(to=SessionYearModel,blank=True)
     matricule_number = models.CharField(max_length=10,primary_key=True)
-    picture = models.ImageField(upload_to=user_directory_path, blank=True, null=True)
+    picture = models.ImageField(upload_to=user_directory_path, blank=True, null=True,default=None)
     USERNAME_FIELD = 'username'
     objects = models.Manager()
 
