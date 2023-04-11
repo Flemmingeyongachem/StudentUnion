@@ -117,6 +117,3 @@ class StudentReceiptDeleteView(LoginRequiredMixin, DeleteView):
         return reverse("StudentUnion:home")
     
 
-#generate models image commands
-# python manage.py graph_models -a > erd.dot 
-# python manage.py graph_models -a > erd.dot  && python manage.py graph_models --pydot -a -g -o erd.png
