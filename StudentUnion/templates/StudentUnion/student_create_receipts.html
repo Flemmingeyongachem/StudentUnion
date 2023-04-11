@@ -78,35 +78,3 @@
     </div>
 </section>
 {% endblock content %}
-
-{% comment %}
-{% block content %}
-<div class="col-md-8">
-    <div class="card">
-        <div class="card-header bg-secondary">
-            <h4 class="card-title text-white text-uppercase">
-                Create New Receipts
-            </h4>
-        </div>
-        <div class="card-body">
-
-            <h6 class="card-category">
-                {% if msg %}
-                <span class="text-danger">{{ msg | safe }}</span>
-                {% else %}
-                Fill in the Receipt's Information
-                {% endif %}
-            </h6>
-            <br />
-            <form method='POST' enctype="multipart/form-data">
-                {% csrf_token %}
-                {{ form.as_p}}
-                <input type="submit" value="Submit">
-            </form>
-
-        </div>
-    </div>
-</div>
-{% endblock content %}
-
-{% endcomment %}

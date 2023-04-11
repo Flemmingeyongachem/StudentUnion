@@ -138,14 +138,16 @@
                     </ul>
                 </li>
                 <li><a class="getstarted scrollto" href="{% url 'accounts:logout'%}">Logout</a></li>
-                {% if profile.picture.url is None %}
-                {{ profile.user.username }}
-                {% else %}
+                {% if profile.picture %}
                 <a href="#">
                     <img src="{{ profile.picture.url }}" alt="Avatar" style="border-radius:50%; width: 75px;
-                    height: 75px;  vertical-align: middle; margin-left:10px;" data-bs-toggle="offcanvas"
+                        height: 75px;  vertical-align: middle; margin-left:10px;" data-bs-toggle="offcanvas"
                         data-bs-target="#myprofile">
                 </a>
+                {% else %}
+                <p style="margin-left:10px;">
+                    Level <span> {{ profile.my_level }}</span>
+                </p>
                 {% endif %}
 
                 <div class="offcanvas offcanvas-start" id="myprofile">
@@ -225,8 +227,12 @@
 
 
                         <div>
+                            {% if profile.picture %}
                             <img class="img-responsive" style="border:0; width: 100%; height: 490px;"
                                 src="{{ profile.picture.url }}" alt="profile picture">
+                            {% else %}
+                            <p>No profile image</p>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
